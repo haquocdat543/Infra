@@ -47,101 +47,25 @@ resource "aws_route_table_association" "a" {
   subnet_id      = aws_subnet.ProdSubnet.id
   route_table_id = aws_route_table.ProdRouteTable.id
 }
-# Create Security Group to allow port 22, 80, 443
-resource "aws_security_group" "ProdSecurityGroup" {
-  name        = "ProdSecurityGroup"
-  description = "Allow SSH HTTP HTTPS"
-  vpc_id      = aws_vpc.prod-vpc.id
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+resource "aws_db_subnet_group" "example" {
+  name       = "main"
 
-  ingress {
-    from_port   = 6443
-    to_port     = 6443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  
-  ingress {
-    from_port   = 2379
-    to_port     = 2380
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 10250
-    to_port     = 10252
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port   = 30000
-    to_port     = 32767
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
+  subnet_ids = aws_subnet.ProdSubnet.id
 
   tags = {
-    Name = "AllowHttpHttpsSshSecurityGroup"
+    Name = "RDS Subnet name"
   }
 }
 
-resource "aws_kms_key" "rds-key" {
-  description             = "RDS key"
-  deletion_window_in_days = 7
-}
-
-# Lookup the available instance classes for the custom engine for the region being operated in
-data "aws_rds_orderable_db_instance" "custom-sqlserver" {
-  engine                     = "custom-sqlserver-se" # CEV engine to be used
-  engine_version             = "15.00.4249.2.v1"     # CEV engine version to be used
-  storage_type               = "gp3"
-  preferred_instance_classes = ["db.r5.xlarge", "db.r5.2xlarge", "db.r5.4xlarge"]
-}
-
-# The RDS instance resource requires an ARN. Look up the ARN of the KMS key.
 resource "aws_db_instance" "example" {
-  allocated_storage           = 500
-  auto_minor_version_upgrade  = false                               # Custom for SQL Server does not support minor version upgrades
-  custom_iam_instance_profile = "AWSRDSCustomSQLServerInstanceRole" # Instance profile is required for Custom for SQL Server. See: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/custom-setup-sqlserver.html#custom-setup-sqlserver.iam
-  backup_retention_period     = 7
-  db_subnet_group_name        = aws_vpc.prod-vpc.name
-  engine                      = data.aws_rds_orderable_db_instance.custom-sqlserver.engine
-  engine_version              = data.aws_rds_orderable_db_instance.custom-sqlserver.engine_version
-  identifier                  = "sql-instance-demo"
-  instance_class              = data.aws_rds_orderable_db_instance.custom-sqlserver.instance_class
-  kms_key_id                  = aws_kms_key.rds-key.id
-  multi_az                    = false # Custom for SQL Server does support multi-az
-  password                    = "avoid-plaintext-passwords"
-  storage_encrypted           = true
-  username                    = "test"
-
-  timeouts {
-    create = "3h"
-    delete = "3h"
-    update = "3h"
-  }
+  allocated_storage    = 20
+  storage_type         = "gp2"
+  engine               = "mysql"
+  engine_version       = "5.7"
+  instance_class       = "db.t2.micro"
+  username             = "haquocdat"
+  password             = "haquocdat"
+  parameter_group_name = "default.mysql5.7"
+  db_subnet_group_name = aws_db_subnet_group.example.name
 }
-
-# Output

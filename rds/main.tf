@@ -9,49 +9,67 @@ provider "aws" {
 resource "aws_vpc" "prod-vpc" {
   cidr_block = "10.0.0.0/16"
   tags = {
-    Name = "Production"
+    Name = "RDS"
+    Env = "Dev"
   }
 }
 # Create Internet Gateway
 resource "aws_internet_gateway" "prod_gw" {
   vpc_id = aws_vpc.prod-vpc.id
-
   tags = {
-    "Name" = "VpcIGW"
+    Name = "RDSInternetGateWay"
+    Env = "Dev"
   }
 }
 # Create Custom Route Table
-resource "aws_route_table" "ProdRouteTable" {
+resource "aws_route_table" "RDSRouteTable" {
   vpc_id = aws_vpc.prod-vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.prod_gw.id
   }
+
   tags = {
-    Name = "Prod_RouteTable"
+    Name = "RDS_RouteTable"
   }
 }
 # Create a Subnet
-resource "aws_subnet" "ProdSubnet" {
+resource "aws_subnet" "RdsSubnet1" {
   vpc_id            = aws_vpc.prod-vpc.id
   cidr_block        = "10.0.0.0/24"
   availability_zone = "ap-northeast-1a"
 
   tags = {
-    Name = "ProdSubnet"
+    Name = "RdsSubnet1"
+    Env = "Dev"
+  }
+}
+resource "aws_subnet" "RdsSubnet2" {
+  vpc_id            = aws_vpc.prod-vpc.id
+  cidr_block        = "10.0.0.0/24"
+  availability_zone = "ap-northeast-1a"
+
+  tags = {
+    Name = "RdsSubnet2"
+    Env = "Dev"
   }
 }
 # Create Associate Subnet with Route Table
 resource "aws_route_table_association" "a" {
-  subnet_id      = aws_subnet.ProdSubnet.id
-  route_table_id = aws_route_table.ProdRouteTable.id
+  subnet_id      = aws_subnet.RdsSubnet1.id
+  route_table_id = aws_route_table.RDSRouteTable.id
+}
+
+resource "aws_route_table_association" "b" {
+  subnet_id      = aws_subnet.RdsSubnet2.id
+  route_table_id = aws_route_table.RDSRouteTable.id
 }
 
 resource "aws_db_subnet_group" "example" {
   name       = "main"
 
-  subnet_ids = [ aws_subnet.ProdSubnet.id ]
+  subnet_ids = [ aws_subnet.RdsSubnet1.id, aws_subnet.RdsSubnet2.id ]
 
   tags = {
     Name = "RDS Subnet name"

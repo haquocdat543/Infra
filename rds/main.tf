@@ -51,7 +51,7 @@ resource "aws_route_table_association" "a" {
 resource "aws_db_subnet_group" "example" {
   name       = "main"
 
-  subnet_ids = aws_subnet.ProdSubnet.id
+  subnet_ids = [ aws_subnet.ProdSubnet.id ]
 
   tags = {
     Name = "RDS Subnet name"

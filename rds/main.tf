@@ -145,6 +145,3 @@ resource "aws_db_instance" "example" {
 }
 
 # Output
-output "Worker2" {
-  value = "ssh -i ~/${var.key_pair}.pem ec2-user@${aws_eip.Worker2.public_ip}"
-}

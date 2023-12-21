@@ -1,0 +1,39 @@
+Resources:
+  Function:
+    Type: AWS::Lambda::Function
+    Properties:
+      Role: !GetAtt LambdaEc2Role.Arn
+      Code:
+        ZipFile: |
+          import boto3
+          client = boto3.client('ec2')
+
+          def lambda_handler(event, context):
+              client.describe_instances()
+              print('fetched your instances ')
+      Runtime: python3.12
+      Handler: index.lambda_handler
+      Timeout: 5
+      Tags:
+       - Key: name
+         Value: ec2
+  LambdaEc2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: ['sts:AssumeRole']
+          Effect: Allow
+          Principal:
+            Service: [lambda.amazonaws.com]
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+        - PolicyName: LambdaStartInstance
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                - 'ec2:*'
+                Effect: Allow
+                Resource: '*'

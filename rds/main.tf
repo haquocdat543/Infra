@@ -92,3 +92,40 @@ resource "aws_db_instance" "example" {
     Env = "Dev"
   }
 }
+
+#Output
+
+output "db_instance_port" {
+  description = "The database port"
+  value       = aws_db_instance.example.port
+}
+
+output "db_instance_name" {
+  description = "The database name"
+  value       = aws_db_instance.example.name
+}
+
+output "db_instance_availability_zone" {
+  description = "The availability zone of the RDS instance"
+  value       = aws_db_instance.example.availability_zone
+}
+
+output "db_instance_endpoint" {
+  description = "The connection endpoint"
+  value       = aws_db_instance.example.endpoint
+}
+
+output "db_listener_endpoint" {
+  description = "Specifies the listener connection endpoint for SQL Server Always On"
+  value       = aws_db_instance.example.endpoint
+}
+
+output "db_instance_engine" {
+  description = "The database engine"
+  value       = aws_db_instance.example.engine
+}
+
+output "db_instance_identifier" {
+  description = "The RDS instance identifier"
+  value       = aws_db_instance.example.identifier
+}

@@ -10,3 +10,5 @@ insert into SINHVIEN values(1,'TRINH TRAN TUYET NHUNG');
 insert into SINHVIEN values(2,'NGUYEN THI THANH HIEN');
 insert into SINHVIEN values(3,'HA QUOC DAT');
 insert into SINHVIEN values(4,'NGUYEN DUC LAM CUONG');
+
+SELECT * FROM SINHVIEN;

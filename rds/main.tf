@@ -105,11 +105,12 @@ resource "aws_db_instance" "example" {
   allocated_storage    = 20
   storage_type         = "gp2"
   engine               = "mariadb"
-  engine_version       = "10.11"
+  engine_version       = "10.6"
   instance_class       = "db.t2.micro"
   username             = "haquocdat"
   password             = "haquocdat"
-  parameter_group_name = "default.mariadb10.11"
+  port                 = 3306
+  parameter_group_name = "default.mariadb10.6"
   db_subnet_group_name = aws_db_subnet_group.example.name
   vpc_security_group_ids = [ aws_security_group.Rds_SG.id ]
   skip_final_snapshot = true

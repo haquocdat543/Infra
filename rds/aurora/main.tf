@@ -110,6 +110,7 @@ resource "aws_rds_cluster" "example" {
   database_name      = "Aurora"
   master_username    = "haquocdat"
   master_password    = "haquocdat"
+  skip_final_snapshot = true
 
   serverlessv2_scaling_configuration {
     max_capacity = 1.0

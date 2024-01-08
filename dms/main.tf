@@ -85,28 +85,28 @@ resource "aws_dms_replication_instance" "test" {
 
 #Output
 
-output "replication_instance_arn" {
+output "replicationInstanceArn" {
   description = "replication_instance_arn"
   value       = aws_dms_replication_instance.test.replication_instance_arn
 }
 
-output "replication_instance_private_ips" {
-  description = "replication_instance_private_ips"
+output "replicationInstancePrivateIps" {
+  description = "replication instance private_ips"
   value       = aws_dms_replication_instance.test.replication_instance_private_ips
 }
 
-output "replication_instance_public_ips" {
+output "replicationInstancePublicIps" {
   description = "replication_instance_public_ips"
   value       = aws_dms_replication_instance.test.replication_instance_public_ips
 }
 
-output "tags_all" {
+output "tagsAll" {
   description = "tags_all"
   value       = aws_dms_replication_instance.test.tags_all
 }
 
-output "default_tags configuration block" {
+output "defaultTagsConfigurationBlock" {
   description = "default_tags configuration block"
-  value       = aws_dms_replication_instance.test.default_tags configuration block
+  value       = aws_dms_replication_instance.test.default_tags
 }
 

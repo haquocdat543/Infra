@@ -82,3 +82,31 @@ resource "aws_dms_replication_instance" "test" {
     aws_iam_role_policy_attachment.dms-vpc-role-AmazonDMSVPCManagementRole
   ]
 }
+
+#Output
+
+output "replication_instance_arn" {
+  description = "replication_instance_arn"
+  value       = aws_dms_replication_instance.test.replication_instance_arn
+}
+
+output "replication_instance_private_ips" {
+  description = "replication_instance_private_ips"
+  value       = aws_dms_replication_instance.test.replication_instance_private_ips
+}
+
+output "replication_instance_public_ips" {
+  description = "replication_instance_public_ips"
+  value       = aws_dms_replication_instance.test.replication_instance_public_ips
+}
+
+output "tags_all" {
+  description = "tags_all"
+  value       = aws_dms_replication_instance.test.tags_all
+}
+
+output "default_tags configuration block" {
+  description = "default_tags configuration block"
+  value       = aws_dms_replication_instance.test.default_tags configuration block
+}
+

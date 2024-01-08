@@ -125,9 +125,9 @@ resource "aws_db_instance" "example" {
 
 # Create a network interface with an ip in the subnet that was created step 4
 resource "aws_network_interface" "Master" {
-  subnet_id       = aws_subnet.ProdSubnet.id
+  subnet_id       = aws_subnet.RdsSubnet1.id
   private_ips     = ["10.0.0.50"]
-  security_groups = [aws_security_group.ProdSecurityGroup.id]
+  security_groups = [aws_security_group.Rds_SG.id]
 }
 
 # Assign an elastic IP to the network interface created in step 7

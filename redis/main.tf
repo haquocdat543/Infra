@@ -112,6 +112,7 @@ resource "aws_elasticache_cluster" "redis" {
   cluster_id           = "haquocdat-redis"
   engine               = "redis"
   apply_immediately    = true
+  availability_zone    = "ap-northeast-1a"
   node_type            = "cache.m4.large"
   num_cache_nodes      = 1
   security_group_ids   = [ aws_security_group.Redis_SG.id ]
@@ -119,6 +120,43 @@ resource "aws_elasticache_cluster" "redis" {
   parameter_group_name = "default.redis7"
   engine_version       = "7.1"
   port                 = 6379
+}
+
+resource "aws_network_interface" "Master" {
+  subnet_id       = aws_subnet.RedisSubnet1.id
+  private_ips     = ["10.0.0.50"]
+  security_groups = [aws_security_group.Redis_SG.id]
+}
+
+resource "aws_eip" "Master" {
+  domain                    = "vpc"
+}
+
+resource "aws_eip_association" "eip_assoc_to_Master" {
+  instance_id   = aws_instance.Master.id
+  allocation_id = aws_eip.Master.id
+}
+
+resource "aws_instance" "Master" {
+  ami               = var.ami_id
+  instance_type     = "t3.small"
+  availability_zone = "ap-northeast-1a"
+  key_name          = var.key_pair
+  user_data         = file("./scripts/install.sh")
+
+  network_interface {
+    device_index         = 0
+    network_interface_id = aws_network_interface.Master.id
+  }
+
+  tags = {
+    "Name" = "Master"
+  }
+}
+
+#Output
+output "Master" {
+  value = "ssh -i ~/${var.key_pair}.pem ec2-user@${aws_eip.Master.public_ip}"
 }
 
 output "hostname" {

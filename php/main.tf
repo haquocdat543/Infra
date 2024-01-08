@@ -147,6 +147,7 @@ resource "aws_instance" "Master" {
   instance_type     = "t3.small"
   availability_zone = "ap-northeast-1a"
   key_name          = var.key_pair
+  user_data         = file("./scripts/php.sh")
 
   network_interface {
     device_index         = 0

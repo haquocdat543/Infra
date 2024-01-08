@@ -3,6 +3,7 @@ provider "aws" {
   shared_config_files      = ["~/.aws/config"]
   shared_credentials_files = ["~/.aws/credentials"]
   profile                  = var.profile
+  region                   = "ap-southeast-1"
 }
 
 # Create VPC
@@ -113,7 +114,7 @@ resource "aws_db_instance" "example" {
   password             = "haquocdat"
   port                 = 3306
   publicly_accessible  = true
-  parameter_group_name = "default.mysql2"
+  parameter_group_name = "default.mysql5.7"
   db_subnet_group_name = aws_db_subnet_group.example.name
   vpc_security_group_ids = [ aws_security_group.Rds_SG.id ]
   skip_final_snapshot = true

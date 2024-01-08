@@ -40,7 +40,7 @@ resource "aws_route_table" "RDSRouteTable" {
 resource "aws_subnet" "RdsSubnet1" {
   vpc_id            = aws_vpc.prod-vpc.id
   cidr_block        = "10.0.0.0/24"
-  availability_zone = "ap-northeast-1a"
+  availability_zone = "ap-southeast-1a"
 
   tags = {
     Name = "RdsSubnet1"
@@ -50,7 +50,7 @@ resource "aws_subnet" "RdsSubnet1" {
 resource "aws_subnet" "RdsSubnet2" {
   vpc_id            = aws_vpc.prod-vpc.id
   cidr_block        = "10.0.1.0/24"
-  availability_zone = "ap-northeast-1d"
+  availability_zone = "ap-southeast-1b"
 
   tags = {
     Name = "RdsSubnet2"
@@ -113,7 +113,7 @@ resource "aws_db_instance" "example" {
   password             = "haquocdat"
   port                 = 3306
   publicly_accessible  = true
-  parameter_group_name = "default.mysql5.7"
+  parameter_group_name = "default.mysql2"
   db_subnet_group_name = aws_db_subnet_group.example.name
   vpc_security_group_ids = [ aws_security_group.Rds_SG.id ]
   skip_final_snapshot = true

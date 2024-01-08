@@ -11,7 +11,7 @@ resource "aws_vpc" "prod-vpc" {
   enable_dns_hostnames = true
   cidr_block = "10.0.0.0/16"
   tags = {
-    Name = "RDS"
+    Name = "DMS"
     Env = "Dev"
   }
 }
@@ -19,12 +19,12 @@ resource "aws_vpc" "prod-vpc" {
 resource "aws_internet_gateway" "prod_gw" {
   vpc_id = aws_vpc.prod-vpc.id
   tags = {
-    Name = "RDSInternetGateWay"
+    Name = "DMSInternetGateWay"
     Env = "Dev"
   }
 }
 # Create Custom Route Table
-resource "aws_route_table" "RDSRouteTable" {
+resource "aws_route_table" "DMSRouteTable" {
   vpc_id = aws_vpc.prod-vpc.id
 
   route {
@@ -33,7 +33,7 @@ resource "aws_route_table" "RDSRouteTable" {
   }
 
   tags = {
-    Name = "RDS_RouteTable"
+    Name = "DMS_RouteTable"
   }
 }
 # Create a Subnet
@@ -47,37 +47,34 @@ resource "aws_subnet" "DMSSubnet1" {
     Env = "Dev"
   }
 }
+
 resource "aws_subnet" "DMSSubnet2" {
   vpc_id            = aws_vpc.prod-vpc.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "ap-northeast-1d"
 
   tags = {
-    Name = "DMSSubnet2"
+    Name = "DMSSubnet1"
     Env = "Dev"
   }
 }
+
 # Create Associate Subnet with Route Table
 resource "aws_route_table_association" "a" {
   subnet_id      = aws_subnet.DMSSubnet1.id
-  route_table_id = aws_route_table.RDSRouteTable.id
+  route_table_id = aws_route_table.DMSRouteTable.id
 }
 
 resource "aws_route_table_association" "b" {
   subnet_id      = aws_subnet.DMSSubnet2.id
-  route_table_id = aws_route_table.RDSRouteTable.id
+  route_table_id = aws_route_table.DMSRouteTable.id
 }
 
-resource "aws_db_subnet_group" "example" {
-  name       = "main"
-
-  subnet_ids = [ aws_subnet.DMSSubnet1.id, aws_subnet.DMSSubnet2.id ]
-
-  tags = {
-    Name = "RDS Subnet name"
-  }
+resource "aws_dms_replication_subnet_group" "dms" {
+  replication_subnet_group_description = "DMS Replication Subnet Group"
+  replication_subnet_group_id          = "example-dms-replication-subnet-group-tf"
+  subnet_ids                           = [ aws_subnet.DMSSubnet1.id, aws_subnet.DMSSubnet2.id ]
 }
-
 resource "aws_security_group" "DMS_SG" {
   name        = "DMS-SG"
   description = "Allow 3306"
@@ -155,22 +152,21 @@ resource "aws_dms_replication_instance" "test" {
   allocated_storage            = 20
   apply_immediately            = true
   auto_minor_version_upgrade   = true
-  availability_zone            = "us-west-2c"
-  engine_version               = "3.1.4"
-  kms_key_arn                  = "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+  availability_zone            = "ap-northeast-1a"
+  engine_version               = "3.5.1"
   multi_az                     = false
   preferred_maintenance_window = "sun:10:30-sun:14:30"
   publicly_accessible          = true
   replication_instance_class   = "dms.t2.micro"
   replication_instance_id      = "test-dms-replication-instance-tf"
-  replication_subnet_group_id  = aws_db_subnet_group.example.id
+  replication_subnet_group_id  = aws_dms_replication_subnet_group.dms.replication_subnet_group_id
 
   tags = {
     Name = "test"
   }
 
   vpc_security_group_ids = [
-    "sg-12345678",
+	aws_security_group.DMS_SG.id
   ]
 
   depends_on = [
@@ -201,9 +197,3 @@ output "tagsAll" {
   description = "tags_all"
   value       = aws_dms_replication_instance.test.tags_all
 }
-
-output "defaultTagsConfigurationBlock" {
-  description = "default_tags configuration block"
-  value       = aws_dms_replication_instance.test.default_tags
-}
-

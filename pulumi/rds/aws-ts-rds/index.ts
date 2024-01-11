@@ -39,10 +39,11 @@ const rdsInstance = new aws.rds.Instance("my-rds-instance", {
     engine: "mysql",                     // Database engine
     instanceClass: "db.t2.micro",        // Instance type
     dbSubnetGroupName: rdsSubnetGroup.name, // Database subnet group
-    name: "mydatabase",                  // Database name
-    username: "admin",                   // Database username
-    password: "secretpassword",          // Database password
-    publiclyAccessible: false,           // Set to true if you want the database to be publicly accessible
+    skipFinalSnapshot: true,              // Skip final snapshot
+    dbName: "mydatabase",                  // Database name
+    username: "haquocdat",                   // Database username
+    password: "haquocdat",          // Database password
+    publiclyAccessible: true,           // Set to true if you want the database to be publicly accessible
 });
 
 // Export the connection details

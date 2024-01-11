@@ -16,8 +16,10 @@ const group = new aws.ec2.SecurityGroup("web-secgrp", {
 // (optional) create a simple web server using the startup script for the instance
 const userData =
 `#!/bin/bash
-echo "Hello, World!" > index.html
-nohup python -m SimpleHTTPServer 80 &`;
+sudo yum install nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx
+`;
 
 const server = new aws.ec2.Instance("web-server-www", {
     tags: { "Name": "web-server-www" },

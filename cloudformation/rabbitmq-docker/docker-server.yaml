@@ -1,0 +1,115 @@
+---
+Outputs:
+  DockerServerPublicIp:
+    Description: DockerServer Public IP
+    Value: !GetAtt DockerServer.PublicIp
+    Export:
+      Name: !Sub "${AWS::StackName}-DockerServer-PublicIp"
+Resources:
+  myVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+      Tags:
+       - Key: name
+         Value: production
+  mySubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: myVPC
+      CidrBlock: 10.0.0.0/24
+      AvailabilityZone: "ap-northeast-1a"
+      Tags:
+      - Key: name
+        Value: production
+  myInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: name
+        Value: production
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: myVPC
+      InternetGatewayId:
+        Ref: myInternetGateway
+  myRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:  
+        Ref: myVPC
+      Tags:
+      - Key: name
+        Value: production
+  myRoute:
+    Type: AWS::EC2::Route
+    DependsOn: myInternetGateway
+    Properties:
+       RouteTableId:
+         Ref: myRouteTable
+       DestinationCidrBlock: 0.0.0.0/0
+       GatewayId:
+         Ref: myInternetGateway
+  mySubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: mySubnet
+      RouteTableId:
+        Ref: myRouteTable
+  mySG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      VpcId: !Ref myVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+  DockerServerENI:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+       Tags:
+       - Key: name
+         Value: production
+       Description: A nice description.
+       SourceDestCheck: 'false'
+       GroupSet: [
+        Ref: mySG
+        ]
+       SubnetId: 
+        Ref: mySubnet
+       PrivateIpAddress: 10.0.0.50
+  DockerServer: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: "ami-07c589821f2b353aa"
+      KeyName: "Window2"
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - Ref: "mySG"
+          SubnetId: 
+            Ref: "mySubnet"
+      InstanceType: t3.small
+  DockerServerENIAttach:
+     Type: AWS::EC2::NetworkInterfaceAttachment
+     Properties:
+        DeleteOnTermination: True
+        InstanceId:
+           Ref: DockerServer
+        NetworkInterfaceId:
+           Ref: DockerServerENI
+        DeviceIndex: 1

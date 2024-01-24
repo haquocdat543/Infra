@@ -8,6 +8,19 @@ resource "google_compute_network" "vpc_network" {
   auto_create_subnetworks = true
 }
 
+resource "google_compute_firewall" "allow-all_firewall" {
+  name    = "allow-all-firewall"
+  network = google_compute_network.vpc_network.name
+
+  allow {
+    protocol = "All"
+    ports    = []
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags = ["http-server"]
+}
+
 resource "google_service_account" "test_sa" {
   account_id   = "my-custom-sa"
   display_name = "Custom SA for VM Instance"
@@ -18,7 +31,7 @@ resource "google_compute_instance" "test_instance" {
   machine_type = "n2-standard-2"
   zone         = "asia-northeast1-a"
 
-  tags = ["foo", "bar"]
+  tags = ["http-server"]
 
   boot_disk {
     initialize_params {

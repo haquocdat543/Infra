@@ -36,6 +36,7 @@ resource "google_compute_instance" "test_instance" {
 
   network_interface {
     network = google_compute_network.vpc_network.name
+    access_config {}
   }
 
   metadata = {
@@ -51,7 +52,13 @@ resource "google_compute_instance" "test_instance" {
   }
 }
 
-output "public-ip" {
-  description = "Public IP"
+output "internal-ip" {
+  description = "Private IP"
   value       = google_compute_instance.test_instance.network_interface.0.network_ip
 }
+
+output "external-ip" {
+  description = "Public IP"
+  value       = google_compute_instance.test_instance.network_interface.0.access_config.0.nat_ip
+}
+

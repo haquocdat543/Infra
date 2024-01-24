@@ -35,7 +35,7 @@ resource "google_compute_instance" "test_instance" {
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-11"
+      image = "centos-cloud/centos-7"
       labels = {
         my_label = "value"
       }

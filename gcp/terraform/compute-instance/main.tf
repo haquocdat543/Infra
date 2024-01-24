@@ -50,3 +50,8 @@ resource "google_compute_instance" "test_instance" {
     scopes = ["cloud-platform"]
   }
 }
+
+output "public-ip" {
+  description = "Public IP"
+  value       = google_compute_instance.test_instance.network_interface.0.network_ip
+}

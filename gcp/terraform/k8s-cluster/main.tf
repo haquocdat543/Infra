@@ -56,7 +56,7 @@ resource "google_compute_instance" "loadbalancer" {
     foo = "bar"
   }
 
-  metadata_startup_script = file("./scripts/rbmq.sh")
+  metadata_startup_script = file("./scripts/loadbalancer.sh")
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
@@ -64,7 +64,6 @@ resource "google_compute_instance" "loadbalancer" {
     scopes = ["cloud-platform"]
   }
 }
-
 
 resource "google_compute_instance" "master1" {
   name         = "master1-instance"
@@ -96,7 +95,7 @@ resource "google_compute_instance" "master1" {
     foo = "bar"
   }
 
-  metadata_startup_script = file("./scripts/rbmq.sh")
+  metadata_startup_script = file("./scripts/master.sh")
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
@@ -135,7 +134,7 @@ resource "google_compute_instance" "master2" {
     foo = "bar"
   }
 
-  metadata_startup_script = file("./scripts/rbmq.sh")
+  metadata_startup_script = file("./scripts/master.sh")
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
@@ -174,7 +173,7 @@ resource "google_compute_instance" "worker1" {
     foo = "bar"
   }
 
-  metadata_startup_script = file("./scripts/rbmq.sh")
+  metadata_startup_script = file("./scripts/worker.sh")
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
@@ -183,8 +182,8 @@ resource "google_compute_instance" "worker1" {
   }
 }
 
-resource "google_compute_instance" "worker1" {
-  name         = "worker1-instance"
+resource "google_compute_instance" "worker2" {
+  name         = "worker2-instance"
   machine_type = "n2-standard-2"
   zone         = "asia-northeast1-a"
 
@@ -213,7 +212,7 @@ resource "google_compute_instance" "worker1" {
     foo = "bar"
   }
 
-  metadata_startup_script = file("./scripts/rbmq.sh")
+  metadata_startup_script = file("./scripts/master.sh")
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.

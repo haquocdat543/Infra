@@ -1,4 +1,4 @@
-output "ip_address" {
-  description = "Server ip address"
+output "network_id" {
+  description = "Network id"
   value       = hcloud_network.hqd-network.id
 }

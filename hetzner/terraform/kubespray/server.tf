@@ -3,6 +3,7 @@ resource "hcloud_server" "master" {
   name        = "master"
   image       = "centos-stream-9"
   server_type = "cx11"
+  ssh_keys = [ hcloud_ssh_key.default.name ]
   public_net {
     ipv4_enabled = true
     ipv6_enabled = false
@@ -20,6 +21,7 @@ resource "hcloud_server" "master1" {
   name        = "master1"
   image       = "centos-stream-9"
   server_type = "cx11"
+  ssh_keys = [ hcloud_ssh_key.default.name ]
   public_net {
     ipv4_enabled = true
     ipv6_enabled = false
@@ -37,6 +39,7 @@ resource "hcloud_server" "worker1" {
   name        = "worker1"
   image       = "centos-stream-9"
   server_type = "cx11"
+  ssh_keys = [ hcloud_ssh_key.default.name ]
   public_net {
     ipv4_enabled = true
     ipv6_enabled = false
@@ -54,6 +57,7 @@ resource "hcloud_server" "worker2" {
   name        = "worker2"
   image       = "centos-stream-9"
   server_type = "cx11"
+  ssh_keys = [ hcloud_ssh_key.default.name ]
   public_net {
     ipv4_enabled = true
     ipv6_enabled = false

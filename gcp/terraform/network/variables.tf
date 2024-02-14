@@ -1,5 +1,6 @@
 variable "projectId" {
   type = string
+  sensitive = true
 }
 
 variable "region" {

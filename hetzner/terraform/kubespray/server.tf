@@ -9,7 +9,7 @@ resource "hcloud_server" "master" {
   }
   network {
     network_id = hcloud_network.mynet.id
-    ip         = "10.0.0.101"
+    ip         = "10.0.1.101"
   }
   depends_on = [
     hcloud_network_subnet.foonet
@@ -26,7 +26,7 @@ resource "hcloud_server" "master1" {
   }
   network {
     network_id = hcloud_network.mynet.id
-    ip         = "10.0.0.102"
+    ip         = "10.0.1.102"
   }
   depends_on = [
     hcloud_network_subnet.foonet
@@ -43,7 +43,7 @@ resource "hcloud_server" "worker1" {
   }
   network {
     network_id = hcloud_network.mynet.id
-    ip         = "10.0.0.103"
+    ip         = "10.0.1.103"
   }
   depends_on = [
     hcloud_network_subnet.foonet
@@ -60,7 +60,7 @@ resource "hcloud_server" "worker2" {
   }
   network {
     network_id = hcloud_network.mynet.id
-    ip         = "10.0.0.104"
+    ip         = "10.0.1.104"
   }
   depends_on = [
     hcloud_network_subnet.foonet

@@ -8,12 +8,12 @@ output "master1-external-ip" {
   value       = google_compute_instance.master1.network_interface.0.access_config.0.nat_ip
 }
 
-output "master12-internal-ip" {
+output "master2-internal-ip" {
   description = "Master private IP"
   value       = google_compute_instance.master2.network_interface.0.network_ip
 }
 
-output "master12-external-ip" {
+output "master2-external-ip" {
   description = "Master public IP"
   value       = google_compute_instance.master2.network_interface.0.access_config.0.nat_ip
 }

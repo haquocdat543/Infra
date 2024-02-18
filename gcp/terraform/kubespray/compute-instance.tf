@@ -28,7 +28,7 @@ resource "google_compute_instance" "master1" {
   }
 
   metadata = {
-    ssh-keys = var.ssh-key
+    ssh_keys = var.ssh_key
   }
 
   metadata_startup_script = file("./scripts/rbmq.sh")
@@ -69,7 +69,7 @@ resource "google_compute_instance" "master2" {
   }
 
   metadata = {
-    ssh-keys = var.ssh-key
+    ssh_keys = var.ssh_key
   }
 
   metadata_startup_script = file("./scripts/rbmq.sh")
@@ -110,7 +110,7 @@ resource "google_compute_instance" "worker1" {
   }
 
   metadata = {
-    ssh-keys = var.ssh-key
+    ssh_keys = var.ssh_key
   }
 
   metadata_startup_script = file("./scripts/rbmq.sh")
@@ -151,7 +151,7 @@ resource "google_compute_instance" "worker2" {
   }
 
   metadata = {
-    ssh-keys = var.ssh-key
+    ssh_keys = var.ssh_key
   }
 
   metadata_startup_script = file("./scripts/rbmq.sh")

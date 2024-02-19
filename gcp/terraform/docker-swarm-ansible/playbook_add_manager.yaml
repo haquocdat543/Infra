@@ -16,4 +16,8 @@
   tasks:
     - name: Join Manager Nodes
       command: "{{ manager_token }}"
+      register: output
 
+    - name: Log token
+      debug: 
+        msg: "{{ output.stdout_lines }}"

@@ -16,4 +16,8 @@
   tasks:
     - name: Join Worker Nodes
       command: "{{ worker_token }}"
+      register: output
 
+    - name: Log token
+      debug: 
+        msg: "{{ output.stdout_lines }}"

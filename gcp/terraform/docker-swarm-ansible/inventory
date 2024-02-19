@@ -1,0 +1,11 @@
+[masters]
+
+[workers]
+
+[masters:vars]
+ansible_ssh_user=gcp
+ansible_ssh_private_key_file=~/.ssh/id_rsa
+
+[workers:vars]
+ansible_ssh_user=gcp
+ansible_ssh_private_key_file=~/.ssh/id_rsa

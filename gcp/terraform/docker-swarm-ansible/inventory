@@ -1,6 +1,19 @@
+[cluster]
+masters & workers
+
+[first-master]
+node1
+
+[others-master]
+node2
+
 [masters]
+node1
+node2
 
 [workers]
+node3
+node4
 
 [masters:vars]
 ansible_ssh_user=gcp

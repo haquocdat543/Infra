@@ -1,0 +1,15 @@
+- hosts: firstmaster
+  tasks:
+  - name: Print manager token
+    command: docker swarm join-token manager
+    register: data
+
+- hosts: othermasters
+  tasks:
+  - name: Use registered data
+    delegate_to: firstmaster
+    vars:
+      data: "{{ data }}"
+    tasks:
+      - debug:
+          msg: "Data from group_1: {{ data }}"

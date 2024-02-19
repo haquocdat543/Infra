@@ -1,19 +1,20 @@
-[cluster]
-masters & workers
+[cluster:children]
+masters
+workers
 
-[first-master]
-node1
+[firstmaster]
+34.84.100.201
 
-[others-master]
-node2
+[othermasters]
+35.189.157.118
 
-[masters]
-node1
-node2
+[masters:children]
+firstmaster
+othermasters
 
 [workers]
-node3
-node4
+34.146.86.124
+35.187.217.16
 
 [masters:vars]
 ansible_ssh_user=gcp

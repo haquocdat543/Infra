@@ -1,0 +1,15 @@
+- hosts: cluster
+  become: true
+  tasks:
+  - name: Install wget
+    shell: yum install -y wget
+  - name: Install git
+    shell: yum install -y git
+  - name: Install yum utils
+    shell: yum install -y yum-utils
+  - name: Add repo
+    shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  - name: Install
+    shell: yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  - name: Start docker
+    shell: systemctl start docker

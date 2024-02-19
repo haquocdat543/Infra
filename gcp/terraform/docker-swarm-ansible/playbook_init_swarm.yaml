@@ -1,0 +1,9 @@
+- hosts: firstmaster
+  become: true
+  tasks:
+  - name: Init cluster
+    shell: docker swarm init --advertise-addr=34.84.100.201
+    register: docker_init
+  - name: Print docker init
+    debug:
+      msg: "{{ docker_init.stdout_lines }}"

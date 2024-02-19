@@ -1,5 +1,5 @@
 ---
-- hosts: 34.84.100.201
+- hosts: node1
   become: true
   tasks:
     - name: Print worker token
@@ -12,7 +12,7 @@
 - hosts: workers
   become: true
   vars:
-    worker_token: "{{ hostvars['34.84.100.201']['worker_token']['stdout'] }}"
+    worker_token: "{{ hostvars['node1']['worker_token']['stdout'] }}"
   tasks:
     - name: Join Worker Nodes
       command: "{{ worker_token }}"

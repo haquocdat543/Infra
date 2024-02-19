@@ -1,5 +1,5 @@
 ---
-- hosts: 34.84.100.201
+- hosts: node1
   become: true
   tasks:
     - name: Print manager token
@@ -12,7 +12,7 @@
 - hosts: othermasters
   become: true
   vars:
-    manager_token: "{{ hostvars['34.84.100.201']['manager_token']['stdout'] }}"
+    manager_token: "{{ hostvars['node1']['manager_token']['stdout'] }}"
   tasks:
     - name: Join Manager Nodes
       command: "{{ manager_token }}"

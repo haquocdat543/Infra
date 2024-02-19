@@ -2,7 +2,7 @@
   become: true
   tasks:
   - name: Init cluster
-    shell: docker swarm init --advertise-addr=34.84.100.201
+    shell: docker swarm init --advertise-addr=node1
     register: docker_init
   - name: Print docker init
     debug:

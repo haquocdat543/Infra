@@ -3,18 +3,18 @@ masters
 workers
 
 [firstmaster]
-34.84.100.201
+node1 ansible_host=35.189.157.118 server_name=node1
 
 [othermasters]
-35.189.157.118
+node2 ansible_host=34.146.86.124 server_name=node2
 
 [masters:children]
 firstmaster
 othermasters
 
 [workers]
-34.146.86.124
-35.187.217.16
+node3 ansible_host=35.187.217.16 server_name=node3
+node4 ansible_host=34.84.100.201 server_name=node4
 
 [masters:vars]
 ansible_ssh_user=gcp

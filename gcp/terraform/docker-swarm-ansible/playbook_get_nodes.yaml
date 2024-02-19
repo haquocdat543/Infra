@@ -1,0 +1,10 @@
+---
+- hosts: node1
+  become: true
+  tasks:
+    - name: Get swarm nodes
+      shell: docker node ls
+      register: swarm_nodes
+    - name: Print swarm nodes
+      debug: 
+        msg: "{{ swarm_nodes.stdout_lines }}"

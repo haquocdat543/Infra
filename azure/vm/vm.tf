@@ -1,4 +1,3 @@
-# We strongly recommend using the required_providers block to set the
 resource "azurerm_virtual_machine" "main" {
   name                  = "${var.prefix}-vm"
   location              = azurerm_resource_group.example.location

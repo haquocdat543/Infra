@@ -1,0 +1,14 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["ec2:StartInstances", "ec2:StopInstances"],
+      "Resource": [
+        "arn:aws:ec2:ap-southeast-1:550053149076:instance/i-07dc5e41d85a57c0c",
+        "arn:aws:ec2:ap-southeast-1:550053149076:instance/i-0ce83b2e8ba44c129",
+        "arn:aws:ec2:ap-southeast-1:550053149076:instance/i-0bbdce5a21db86684"
+      ]
+    }
+  ]
+}

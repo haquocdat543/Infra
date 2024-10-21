@@ -1,12 +1,17 @@
 steps:
 # Step 1: Build the Docker Image
 - name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '-t', 'docker-image-location/docker-youtube/my-build:prod1', '.' ]
+  args: 
+  - 'build'
+  - '-t'
+  - 'docker-image-location/docker-youtube/my-build:prod1'
+  - '.'
 
 # Step 2: Push the image to the Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: [ 'push', 'docker-image-location/docker-youtube/my-build:prod1' ]
-
+  args: 
+  - 'push'
+  - 'docker-image-location/docker-youtube/my-build:prod1' 
 
 # Step 3: Deployment to Cloud Run after image is pushed
 - name: 'gcr.io/cloud-builders/gcloud'
